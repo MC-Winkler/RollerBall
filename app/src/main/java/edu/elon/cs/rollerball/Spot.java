@@ -77,7 +77,6 @@ public class Spot {
 
 
     public void doUpdate(double elapsed) {
-        System.out.println("timeSince = "+ timeSinceBallEnteredSpot);
         if (timeSinceBallEnteredSpot >= 3.0) {
             generateNewLocation();
             timeSinceBallEnteredSpot = 0;

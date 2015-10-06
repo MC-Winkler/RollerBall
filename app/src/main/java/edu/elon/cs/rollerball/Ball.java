@@ -24,7 +24,7 @@ public class Ball {
     protected float x, y, accelX, accelY, width, height;
     private Bitmap bitmap;
 
-    private int horizontalScreenWidth, horizontalScreenHeight;
+    private int screenWidth, screenHeight;
 
     private final float SCALE = 0.1f;
    // private final float FILTER = 0.3f;
@@ -43,11 +43,11 @@ public class Ball {
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        horizontalScreenWidth = size.y;
-        horizontalScreenHeight = size.x;
+        screenHeight = size.y;
+        screenWidth = size.x;
         // start in center
-        y = horizontalScreenHeight/2;
-        x = horizontalScreenWidth/2;
+        y = screenHeight/2;
+        x = screenWidth/2;
     }
 
     public void doDraw(Canvas canvas){
@@ -65,15 +65,16 @@ public class Ball {
          x = (1.0f-FILTER)*x + (FILTER*event.values[1]);
          y = (1.0f-FILTER)*y + (FILTER* event.values[0]);
          */
+        if (event != null) {
+            float newX = x + event.values[1];
+            float newY = y + event.values[0];
+            if (newX - (width / 2) >= 0 && (newX + width / 2) <= screenWidth) {
+                x = newX;
+            }
 
-        float newX = x + event.values[1];
-        float newY = y + event.values[0];
-        if (newX-(width/2) >=0 && (newX+width/2) <=horizontalScreenWidth) {
-            x = newX;
-        }
-
-        if (newY-(width/2) >=0 && (newY+width/2) <=horizontalScreenWidth) {
-            y = newY;
+            if (newY - (height / 2) >= 0 && (newY + height / 2) <= screenHeight) {
+                y = newY;
+            }
         }
 
     }
