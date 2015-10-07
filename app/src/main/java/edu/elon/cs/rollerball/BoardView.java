@@ -27,9 +27,9 @@ import java.util.ArrayList;
  * Modified by Michael Winkler
  */
 
-public class GameLoopView extends SurfaceView implements SurfaceHolder.Callback, SensorEventListener {
+public class BoardView extends SurfaceView implements SurfaceHolder.Callback, SensorEventListener {
 
-    private GameLoopThread thread;
+    private BoardViewThread thread;
     private SurfaceHolder surfaceHolder;
     private Context context;
     private int screenWidth, screenHeight;
@@ -38,7 +38,7 @@ public class GameLoopView extends SurfaceView implements SurfaceHolder.Callback,
     private Sensor mAccel;
     private SensorEvent currentSensorEvent;
 
-    public GameLoopView(Context context, AttributeSet attrs) {
+    public BoardView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         // remember the context for finding resources
@@ -49,7 +49,7 @@ public class GameLoopView extends SurfaceView implements SurfaceHolder.Callback,
         surfaceHolder.addCallback(this);
 
         // game loop thread
-        thread = new GameLoopThread();
+        thread = new BoardViewThread();
 
         // figure out the screen width
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -59,6 +59,7 @@ public class GameLoopView extends SurfaceView implements SurfaceHolder.Callback,
         screenWidth = size.x;
         screenHeight = size.y;
 
+        //Set the background instance variable to reference the relevant background image
         background = BitmapFactory.decodeResource(context.getResources(),R.drawable.board);
 
         // Accelerometer
@@ -73,7 +74,7 @@ public class GameLoopView extends SurfaceView implements SurfaceHolder.Callback,
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         // thread exists, but is in terminated state
         if (thread.getState() == Thread.State.TERMINATED) {
-            thread = new GameLoopThread();
+            thread = new BoardViewThread();
         }
 
         // start the game loop
@@ -108,7 +109,7 @@ public class GameLoopView extends SurfaceView implements SurfaceHolder.Callback,
     }
 
     // Game Loop Thread
-    private class GameLoopThread extends Thread {
+    private class BoardViewThread extends Thread {
 
         private boolean isRunning = false;
         private long lastTime;
@@ -121,7 +122,7 @@ public class GameLoopView extends SurfaceView implements SurfaceHolder.Callback,
         private int frames;
         private long nextUpdate;
 
-        public GameLoopThread() {
+        public BoardViewThread() {
             ball = new Ball(context);
             spot = new Spot(context, ball);
         }
@@ -204,8 +205,11 @@ public class GameLoopView extends SurfaceView implements SurfaceHolder.Callback,
         }
     }
 
+
     public void onSensorChanged(SensorEvent event) {
-        currentSensorEvent = event;
+        //When the user tilts the phone, asign the resulting Sensor event to currentSensorEvent.
+        //It then gets passed to the ball object in ball.doUpdate so the ball knows where to roll.
+           currentSensorEvent = event;
     }
 
     @Override

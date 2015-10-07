@@ -12,6 +12,8 @@ import android.view.WindowManager;
 import java.util.Random;
 
 /**
+ * Defines the 'spot' for our game. Once the ball rests in the spot for 3 seconds,
+ * the spot moves to a new randomly generated location.
  * @author Michael Winkler
  */
 public class Spot {
@@ -40,13 +42,14 @@ public class Spot {
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        screenWidth = size.y;
-        screenHeight = size.x;
+        screenWidth = size.x;
+        screenHeight = size.y;
 
         this.ball = ball;
-        x= 100;
-        y=100;
-        //generateNewLocation();
+
+        //Generate the spot's starting location and place it there
+        generateNewLocation();
+
     }
 
     public void doDraw (Canvas canvas){
@@ -57,25 +60,6 @@ public class Spot {
                 null);
     }
 
-    /*public void doUpdate(double elapsed) {
-        if (timeSinceBallEnteredSpot >= 3000.0) {
-            generateNewLocation();
-            timeSinceBallEnteredSpot = 0;
-        }
-
-        else{
-            if(((ball.x - ball.height/2) >= (x-height/2)) && ((ball.x + ball.height/2) <= (x+height/2))
-                    && ((ball.y - ball.width/2) >= (y-width/2)) && ((ball.y + ball.width/2) <= (y+width/2))) { //ball in square
-                timeSinceBallEnteredSpot += elapsed;
-            }
-            else {
-                timeSinceBallEnteredSpot = 0;
-            }
-        }
-
-    }*/
-
-
     public void doUpdate(double elapsed) {
         if (timeSinceBallEnteredSpot >= 3.0) {
             generateNewLocation();
@@ -83,8 +67,8 @@ public class Spot {
         }
 
         else{
-            if(((ball.x - ball.height/2) >= (x-height/2)) && ((ball.x + ball.height/2) <= (x+height/2))
-                    && ((ball.y - ball.width/2) >= (y-width/2)) && ((ball.y + ball.width/2) <= (y+width/2))) { //ball in square
+            if(((ball.x - ball.width/2) >= (x-width/2)) && ((ball.x + ball.width/2) <= (x+width/2))
+                    && ((ball.y - ball.height/2) >= (y-height/2)) && ((ball.y + ball.height/2) <= (y+height/2))) { //ball in square
                 timeSinceBallEnteredSpot += elapsed;
             }
             else {
@@ -94,8 +78,8 @@ public class Spot {
 
     }
 
-
     public void generateNewLocation(){
+        //generate new x and y coordinates for the spot and assign them to x and y
         float newX = (float) Math.random()*((screenWidth-(width/2)) - (width/2));
         newX += (width/2);
         x = newX;

@@ -59,12 +59,10 @@ public class Ball {
                 null);
     }
 
+
     public void doUpdate(SensorEvent event) {
-         //easing based on touch point
-        /*does wacky things
-         x = (1.0f-FILTER)*x + (FILTER*event.values[1]);
-         y = (1.0f-FILTER)*y + (FILTER* event.values[0]);
-         */
+        //Use the accelerometer data passed from our GameLoopView to calculate
+        //a new position
         if (event != null) {
             float newX = x + event.values[1];
             float newY = y + event.values[0];
